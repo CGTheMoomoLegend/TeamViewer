@@ -1,5 +1,6 @@
 import threading
 import select
+import time
 from CONSTANTS import *
 from sockets_wrappers import *
 
@@ -9,61 +10,65 @@ exitFlag = False
 dataSocks = []
 inputSocks = []
 
+class Client(object):
+    def __init__(self, dataSock: client_socket, inputSock: client_socket, isReceiver):
+        self.dataSock = dataSock
+        self.inputSock = inputSock
+        self.isReceiver = isReceiver
 
-def listenForClients(sock, l):
-    global exitFlag
+rooms = []
+num_of_rooms = 0
+
+def listenForClients():
+    global exitFlag, num_of_rooms
     while not exitFlag:
         try:
-            newClientData = sock.accept()
-            print("new connection sock#" + str(newClientData.fileno()))
-            l.append(newClientData)
-            print("current data socks:")
-            print([str(x.fileno()) + ", " for x in dataSocks])
-            print("current input socks:")
-            print([str(x.fileno()) + ", " for x in inputSocks])
+            newClientData = dataSocket.accept()
+            newClientInput = inputSocket.accept()
+            print("NEW CONNECTION YEET")
+            dataSocks.append(newClientData)
+            inputSocks.append(newClientInput)
+            print(" number of room: " + str(num_of_rooms))
+            if not rooms or not rooms[num_of_rooms]:
+                # got new sharer client
+                rooms.append([Client(newClientData, newClientInput, False)])
+                print("adding new sharer to room number: " + str(num_of_rooms))
+            else:
+                rooms[num_of_rooms].append(Client(newClientData, newClientInput, True))
+                print("adding receiver to room number: " + str(num_of_rooms))
+                sharer = rooms[num_of_rooms][SHARER_INDEX]
+                receiver = rooms[num_of_rooms][RECEIVER_INDEX]
+                sharer_thread = threading.Thread(target=handle_client, args=(sharer, receiver))
+                receiver_thread = threading.Thread(target=handle_client, args=(receiver, sharer))
+                sharer_thread.start()
+                receiver_thread.start()
+                num_of_rooms += 1
         except socket.timeout:
             continue
-
-
-def broadcastToClients(data: str, sockList, ignoreSock):
-    if data is None:
-        return
-    for s in sockList:
-        if s.fileno() == ignoreSock.fileno():
+        except IndexError as e:
+            print(e)
             continue
-        s.send(data)
 
 
-def handleSockList(l, isdata):
+def handle_client(c: Client, o: Client):
     global exitFlag
-    while not exitFlag:
-        dataBuf = None
-        output = []
-        try:
-            if isdata and not l:
-                s = l[1]
-            elf:
-                s = l[-1]
-            dataBuf = s.receive()
-            # print("received data on sock#" + str(s.fileno()))
-            # print("data is " + str(dataBuf[:10]))
-            broadcastToClients(dataBuf, l, s)
-        except socket.error:
-            print("sock#" + str(s.fileno()) + " got fucked, closing")
-            s.close()
-            l = list(filter(lambda item: item != s, l))
+    if c.isReceiver:
+        # loop on input and broadcast
+        while not exitFlag:
+            buf = c.inputSock.receive()
+            o.inputSock.send(buf)
+    else:
+        # loop on data and broadcast
+        while not exitFlag:
+            buf = c.dataSock.receive()
+            o.dataSock.send(buf)
 
 
 def main():
-    listen1 = threading.Thread(target=listenForClients, args=(inputSocket, inputSocks, ))
-    listen1.start()
-    listen2 = threading.Thread(target=listenForClients, args=(dataSocket, dataSocks, ))
-    listen2.start()
-    dataSocksThread = threading.Thread(target=handleSockList, args=(dataSocks, True, ))
-    dataSocksThread.start()
-    handleSockList(inputSocks, False)
-    inputSocksThread = threading.Thread(target=handleSockList, args=(inputSocks, False,  ))
-    inputSocksThread.start()
+    # listen = threading.Thread(target=listenForClients)
+    # listen.start()
+    listenForClients()
+
     map(lambda x: x.close(), dataSocks)
     map(lambda x: x.close(), inputSocks)
     dataSocket.close()
