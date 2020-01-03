@@ -1,7 +1,9 @@
-from sockets_wrappers import client_socket
 from pygame import image
 from zlib import decompress
-from CONSTANTS import  DATA_PORT, INPUT_PORT, SCREEN_SIZE
+
+from pygame import image
+
+from CONSTANTS import SCREEN_SIZE
 
 
 class Client:
@@ -11,7 +13,7 @@ class Client:
 
     def receive_image(self):
         pixels = self.data_socket.receive()
-        print(pixels, "\r\n", "len =" ,len(pixels), "\r\n")
+        print(pixels, "\r\n", "len =", len(pixels), "\r\n")
         for pixel in pixels:
             if pixel == '\\':
                 print("YES!!!!")

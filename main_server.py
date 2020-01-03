@@ -1,11 +1,9 @@
-from zlib import compress
-from mss import mss, tools
-import Server
+import ctypes
+import sys
 from time import sleep
-import ctypes, sys
+
+import Server
 from sockets_wrappers import *
-import image_encoding
-from CONSTANTS import *
 
 
 def is_admin():
@@ -15,12 +13,16 @@ def is_admin():
         return False
 
 
-
-
-def main(data_sock : client_socket = client_socket(SERVER_IP, DATA_PORT), input_sock : client_socket = client_socket(SERVER_IP, INPUT_PORT)):
+def main(data_sock: client_socket,
+         input_sock: client_socket):
     if is_admin():
         # Code of your program here
-        server = Server.Server(data_sock, input_sock)
+        # info_sock = client_socket(SERVER_IP, 1234)
+        # msg = "controlled" + ':False'
+        # print(msg)
+        # info_sock.send(msg)
+        # info_sock.close()
+        server = Server.Server(data_sock[0], input_sock[0])
         try:
             while 'recording':
                 # getting, sending screenshot
@@ -37,4 +39,3 @@ def main(data_sock : client_socket = client_socket(SERVER_IP, DATA_PORT), input_
 
 if __name__ == '__main__':
     main()
-

@@ -1,4 +1,5 @@
 import socket
+
 from CONSTANTS import MSG_LEN_SIZE, MAX_CLIENTS
 
 
@@ -27,7 +28,7 @@ def get_socket_bytes(msg: str):
 
 
 class client_socket:
-    def __init__(self, ip = None, port=None, sockNumber=-1):
+    def __init__(self, ip=None, port=None, sockNumber=-1):
         self.ip = ip
         self.port = port
         if ip is None and port is None:
@@ -40,7 +41,6 @@ class client_socket:
             print('connecting to server')
             self.socket.connect((ip, port))
             print('connected to server')
-            
 
     def __eq__(self, other):
         return self.fileno() == other.fileno()
@@ -61,6 +61,7 @@ class client_socket:
     def close(self):
         self.socket.close()
 
+
 class server_socket:
     def __init__(self, ip, port, timeout):
         self.ip = ip
@@ -76,8 +77,8 @@ class server_socket:
         print("listening for clients")
 
     def accept(self):
-        newSock, _ = self.server_socket.accept()    
-        #newSock.settimeout(self.timeout)
+        newSock, _ = self.server_socket.accept()
+        # newSock.settimeout(self.timeout)
         return client_socket(sockNumber=newSock)
 
     def fileno(self):
@@ -85,6 +86,3 @@ class server_socket:
 
     def close(self):
         self.server_socket.close()
-            
-
-    

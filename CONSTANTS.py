@@ -1,15 +1,12 @@
+# screen related
 
-
-#screen related
-
-MONITOR_NUMBER = 0
+MONITOR_NUMBER = 1
 WIDTH = 1920
 HEIGHT = 1080
 SCREEN_SIZE = (WIDTH, HEIGHT)
 GUI_X = 500
-GUI_Y  = 500
+GUI_Y = 500
 GUI_SIZE = (GUI_X, GUI_Y)
-
 
 # image related
 
@@ -26,19 +23,19 @@ MSG_LEN_SIZE = 8
 ACCEPT_ALL_IP = "0.0.0.0"
 TIMEOUT = 10
 EXIT_FLAG_MESSAGE = "SHUTDOWN_SERVER"
-SHARER_INDEX = 0
-RECEIVER_INDEX = 1
+CONTROLLED_INDEX = 0
+CONTROLLER_INDEX = 1
 SERVER_IP = 'localhost'
 
-#input related
+# input related
 
 MOUSE_MAP = {1: 2, 2: 32, 3: 8}
 
-#pygame related
+# pygame related
 
 TICK_RATE = 60
 
-#code related
+# code related
 
 FIRST_INDEX = 0
 LAST_INDEX = -1

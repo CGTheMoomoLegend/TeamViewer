@@ -1,17 +1,22 @@
-import wx
-from CONSTANTS import *
-from sockets_wrappers import *
 import json
+
+import wx
+
 import main_client
 import main_server
+from CONSTANTS import *
+from sockets_wrappers import *
 
 username = ""
 isIntro = True
 isConnected = False
 
+
 class Frame(wx.Frame):
 
-    def __init__(self,data_sock : client_socket = client_socket(SERVER_IP, DATA_PORT), input_sock : client_socket = client_socket(SERVER_IP, INPUT_PORT),  info_sock : client_socket = client_socket(SERVER_IP, 1234), isCtrl = None):
+    def __init__(self, data_sock: client_socket,
+                 input_sock: client_socket,
+                 info_sock: client_socket, isCtrl=None):
 
         self.data_sock = data_sock
         self.input_sock = input_sock
@@ -19,14 +24,13 @@ class Frame(wx.Frame):
         self.newFrame = None
         self.isCtrl = isCtrl
         self.app = wx.App()
-        wx.Frame.__init__(self, None, title= 'TeamViewer_client', size= GUI_SIZE)
+        wx.Frame.__init__(self, None, title='TeamViewer_client', size=GUI_SIZE)
         if isIntro:
             self.panel = IntroPanel(self)
         else:
             self.panel = MainPanel(self)
         self.Show()
         self.app.MainLoop()
-
 
     def _on_button_click(self, e):
         global username, isIntro
@@ -37,10 +41,10 @@ class Frame(wx.Frame):
                 return
             else:
                 self.isCtrl = self.panel.isControl.GetValue()
-                print (self.isCtrl)
-                print (username)
-                msg = username  + ':' + str(self.isCtrl)
-                print (msg)
+                print(self.isCtrl)
+                print(username)
+                msg = username + ':' + str(self.isCtrl)
+                print(msg)
                 self.info_sock.send(msg)
                 self.Close()
                 print("closing")
@@ -63,7 +67,7 @@ class IntroPanel(wx.Panel):
         font = wx.Font(13, wx.DECORATIVE, wx.ITALIC, wx.BOLD)
         text.SetFont(font)
 
-        self.isControl = wx.CheckBox(self, label = "Control other pc", pos=(GUI_X/3, GUI_Y / 5 + 30))
+        self.isControl = wx.CheckBox(self, label="Control other pc", pos=(GUI_X / 3, GUI_Y / 5 + 30))
         self.isShare = wx.CheckBox(self, label="Share with other pc", pos=(GUI_X / 3, GUI_Y / 5 + 60))
         self.text_ptr = wx.TextCtrl(self, pos=(GUI_X / 3, GUI_Y / 2.5), size=(GUI_X / 3, 20))
 
@@ -80,7 +84,8 @@ class IntroPanel(wx.Panel):
             self.isControl.SetValue(False)
 
     def error_msg(self):
-        error_text = wx.StaticText(self, -1, "Error, must fill all fields", pos= (GUI_X/3, 10))
+        error_text = wx.StaticText(self, -1, "Error, must fill all fields", pos=(GUI_X / 3, 10))
+
 
 class MainPanel(wx.Panel):
 
@@ -110,10 +115,11 @@ class MainPanel(wx.Panel):
                 button_x = GUI_X / 6
                 button_y = 20
                 for key in dict:
-                    button = wx.Button(self, label= "Room number: " + key + " user: " + dict[key], size=(GUI_X / 4 + 100, 40), pos=(button_x, button_y))
+                    button = wx.Button(self, label="Room number: " + key + " user: " + dict[key],
+                                       size=(GUI_X / 4 + 100, 40), pos=(button_x, button_y))
                     self.Bind(wx.EVT_BUTTON, lambda event: parent._on_room_button_click(event, key), button)
                     self.l_buttons.append(button)
-                    if(button_y >= GUI_Y):
+                    if (button_y >= GUI_Y):
                         button_x = GUI_X / 6 + GUI_X / 4 + 10
                         button_y = 20
                     else:
@@ -126,17 +132,20 @@ class MainPanel(wx.Panel):
             parent.info_sock.close()
             main_server.main(parent.data_sock, parent.input_sock)
 
-
     def error_msg(self):
         pass
 
 
 def main():
-    #dataSock.send("das:False")
-    frame = Frame() #TODO add dataSock and inputSock into frame
+    # dataSock.send("das:False")
+    data_sock = client_socket(SERVER_IP, DATA_PORT),
+    input_sock = client_socket(SERVER_IP, INPUT_PORT),
+    info_sock = client_socket(SERVER_IP, 1234)
+    frame = Frame(data_sock, input_sock, info_sock)  # TODO add dataSock and inputSock into frame
     while isIntro:
         continue
-    new_frame = Frame(frame.data_sock, frame.input_sock, frame.info_sock, frame.isCtrl)
+    new_frame = Frame(data_sock, input_sock, info_sock, frame.isCtrl)
+
 
 if __name__ == '__main__':
     main()

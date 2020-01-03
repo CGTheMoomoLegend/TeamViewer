@@ -1,12 +1,15 @@
-import pyautogui
 import _thread
-from sockets_wrappers import *
+
+import pyautogui
 import win32api
+
 from CONSTANTS import MOUSE_MAP, DATA_PORT, INPUT_PORT
 from image_encoding import get_screenshot, compress_screenshot
+from sockets_wrappers import *
+
 
 class Server:
-    def __init__(self, data_sock : client_socket = None, input_sock : client_socket = None):
+    def __init__(self, data_sock: client_socket, input_sock: client_socket):
         self.ports = {'data': DATA_PORT, 'input': INPUT_PORT}
         self.data_socket = data_sock
         self.input_socket = input_sock
@@ -40,6 +43,7 @@ class Server:
 
     def __input__loop(self):
         # print('input loop started')
+        print(self.input_socket)
         while 'listening':
             msg = self.input_socket.receive().decode('ascii').split(':')
             prefix = msg[0]
@@ -51,5 +55,6 @@ class Server:
             elif prefix == "mm":
                 self.handle_mouse_mov_msg(msg[1], msg[2])
 
+
 def key_combinations(key):
-        pass
+    pass

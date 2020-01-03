@@ -1,12 +1,9 @@
-
-
-#screen related
+# screen related
 
 MONITOR_NUMBER = 1
 WIDTH = 1920
 HEIGHT = 1080
 SCREEN_SIZE = (WIDTH, HEIGHT)
-
 
 # image related
 
@@ -25,10 +22,10 @@ EXIT_FLAG_MESSAGE = "SHUTDOWN_SERVER"
 SHARER_INDEX = 0
 RECEIVER_INDEX = 1
 
-#input related
+# input related
 
 MOUSE_MAP = {1: 2, 2: 32, 3: 8}
 
-#pygame related
+# pygame related
 
 TICK_RATE = 60
