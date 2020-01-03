@@ -6,10 +6,10 @@ from CONSTANTS import MOUSE_MAP, DATA_PORT, INPUT_PORT
 from image_encoding import get_screenshot, compress_screenshot
 
 class Server:
-    def __init__(self, ip='localhost', data_port=DATA_PORT, input_port=INPUT_PORT):
-        self.ports = {'data': data_port, 'input': input_port}
-        self.data_socket = client_socket(ip, data_port)
-        self.input_socket = client_socket(ip, input_port)
+    def __init__(self, data_sock : client_socket = None, input_sock : client_socket = None):
+        self.ports = {'data': DATA_PORT, 'input': INPUT_PORT}
+        self.data_socket = data_sock
+        self.input_socket = input_sock
         self.input_thread = _thread.start_new_thread(self.__input__loop, ())
 
     def send_screenshot(self):
@@ -50,3 +50,6 @@ class Server:
                 self.handle_mouse_btn_msg(msg[1], prefix == "md")
             elif prefix == "mm":
                 self.handle_mouse_mov_msg(msg[1], msg[2])
+
+def key_combinations(key):
+        pass

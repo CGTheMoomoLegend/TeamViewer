@@ -2,13 +2,10 @@
 
 #screen related
 
-MONITOR_NUMBER = 0
+MONITOR_NUMBER = 1
 WIDTH = 1920
 HEIGHT = 1080
 SCREEN_SIZE = (WIDTH, HEIGHT)
-GUI_X = 500
-GUI_Y  = 500
-GUI_SIZE = (GUI_X, GUI_Y)
 
 
 # image related
@@ -18,9 +15,8 @@ CHUNK_COUNT = 8
 
 # socket related
 
-DATA_PORT = 3595
-INPUT_PORT = 3596
-PENDING_PORT = 3597
+DATA_PORT = 2222
+INPUT_PORT = 7777
 MAX_CLIENTS = 5
 MSG_LEN_SIZE = 8
 ACCEPT_ALL_IP = "0.0.0.0"
@@ -28,7 +24,6 @@ TIMEOUT = 10
 EXIT_FLAG_MESSAGE = "SHUTDOWN_SERVER"
 SHARER_INDEX = 0
 RECEIVER_INDEX = 1
-SERVER_IP = 'localhost'
 
 #input related
 
@@ -37,8 +32,3 @@ MOUSE_MAP = {1: 2, 2: 32, 3: 8}
 #pygame related
 
 TICK_RATE = 60
-
-#code related
-
-FIRST_INDEX = 0
-LAST_INDEX = -1

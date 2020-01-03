@@ -5,10 +5,9 @@ from CONSTANTS import  DATA_PORT, INPUT_PORT, SCREEN_SIZE
 
 
 class Client:
-    def __init__(self, ip, data_port=DATA_PORT, input_port=INPUT_PORT):
-        self.ports = {'data': data_port, 'input': input_port}
-        self.data_socket = client_socket(ip, data_port)
-        self.input_socket = client_socket(ip, input_port)
+    def __init__(self, data_sock, input_sock):
+        self.data_socket = data_sock
+        self.input_socket = input_sock
 
     def receive_image(self):
         pixels = self.data_socket.receive()

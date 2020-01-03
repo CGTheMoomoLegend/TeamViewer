@@ -2,6 +2,8 @@ import pygame
 import Client
 import _thread
 from CONSTANTS import TICK_RATE, SCREEN_SIZE
+from sockets_wrappers import *
+from CONSTANTS import *
 
 def pygame_init_display(screen_size):
     pygame.init()
@@ -19,12 +21,12 @@ def pygame_display_loop(client, screen):
         screen.blit(client.receive_image(), (0, 0))
         pygame.display.update()
 
-def main():
+def main(data_sock : client_socket = None, input_sock : client_socket = None):
     # creating pygame, screen, clock
     screen = pygame_init_display(SCREEN_SIZE)
     clock = pygame_init_clock(TICK_RATE)
     # creating client
-    client = Client.Client('localhost')
+    client = Client.Client(data_sock, input_sock)
     try:
 
         thread = _thread.start_new_thread(pygame_display_loop, (client, screen))
