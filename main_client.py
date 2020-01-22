@@ -45,15 +45,18 @@ def main(data_sock: client_socket, input_sock: client_socket):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    client.send_close_msg()
                     return
                 elif event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+                    print(event.type == pygame.KEYDOWN)
                     client.send_kb_msg(event.key, event.type == pygame.KEYDOWN)
                 elif event.type == pygame.MOUSEMOTION:
                     client.send_mouse_loc_msg(pygame.mouse.get_pos())
                 elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
                     client.send_mouse_btn_msg(event.button, event.type == pygame.MOUSEBUTTONDOWN)
 
-
+    except Exception:
+        pass
 
     finally:
         pass

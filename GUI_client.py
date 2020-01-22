@@ -51,8 +51,11 @@ class Frame(wx.Frame):
                 isIntro = False
                 return
 
-    def _on_room_button_click(self, e, room_number):
-        self.info_sock.send(to_str(room_number))
+    def _on_room_button_click(self, e):
+        list = e.GetEventObject()
+        index = list.GetSelection()
+        print (index)
+        self.info_sock.send(to_str(index))
         self.info_sock.close()
         main_client.main(self.data_sock, self.input_sock)
         self.Close()
@@ -104,8 +107,10 @@ class MainPanel(wx.Panel):
             print(dict)
 
             if not dict:
-                text = wx.StaticText(self, -1, "No users connected for you to control", pos=(GUI_X / 10, GUI_Y / 5))
-                text2 = wx.StaticText(self, -1, "Please close and try again later", pos=(GUI_X / 10, GUI_Y / 4))
+                text = wx.StaticText(self, -1, "No users connected for you to control",
+                                     pos=(GUI_X / 10, GUI_Y / 5))
+                text2 = wx.StaticText(self, -1, "Please close and try again later",
+                                      pos=(GUI_X / 10, GUI_Y / 4))
                 font = wx.Font(13, wx.DECORATIVE, wx.ITALIC, wx.BOLD)
                 text.SetFont(font)
                 text2.SetFont(font)
@@ -114,16 +119,23 @@ class MainPanel(wx.Panel):
                 print("trying to create button", dict)
                 button_x = GUI_X / 6
                 button_y = 20
+                self.listBox = wx.ListBox(choices=[], name='listbox', parent=self,
+                                          pos=wx.Point(GUI_X / 6, 20), size=(200, 200), style=0)
                 for key in dict:
-                    button = wx.Button(self, label="Room number: " + key + " user: " + dict[key],
-                                       size=(GUI_X / 4 + 100, 40), pos=(button_x, button_y))
-                    self.Bind(wx.EVT_BUTTON, lambda event: parent._on_room_button_click(event, key), button)
-                    self.l_buttons.append(button)
-                    if (button_y >= GUI_Y):
-                        button_x = GUI_X / 6 + GUI_X / 4 + 10
-                        button_y = 20
-                    else:
-                        button_y += 60
+                    self.listBox.Append("Room number: " + key + "user: " + dict[key])
+
+                self.listBox.Bind(wx.EVT_LISTBOX, parent._on_room_button_click)
+
+
+                    # button = wx.Button(self, label="Room number: " + key + " user: " + dict[key],
+                    #                    size=(GUI_X / 4 + 100, 40), pos=(button_x, button_y))
+                    # self.Bind(wx.EVT_BUTTON, lambda event: parent._on_room_button_click(event, key), button)
+                    # self.l_buttons.append(button)
+                    # if (button_y >= GUI_Y):
+                    #     button_x = GUI_X / 6 + GUI_X / 4 + 10
+                    #     button_y = 20
+                    # else:
+                    #     button_y += 60
         else:
             print("trying to screen")
             text = wx.StaticText(self, -1, "Sharing Screen... waiting for control", pos=(GUI_X / 10, GUI_Y / 5))
@@ -131,6 +143,8 @@ class MainPanel(wx.Panel):
             text.SetFont(font)
             parent.info_sock.close()
             main_server.main(parent.data_sock, parent.input_sock)
+
+
 
     def error_msg(self):
         pass

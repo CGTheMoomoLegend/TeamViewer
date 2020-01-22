@@ -22,6 +22,9 @@ class Client(object):
         self.roomNumber = roomNumber
         self.username = username
 
+    def close(self):
+        self.dataSock.close()
+        self.inputSock.close()
 
 user_dict = {}
 rooms = []
@@ -101,19 +104,21 @@ def bytes_to_int(bytes):
 
 def handle_client(c: Client, o: Client):
     global exitFlag
+    try:
+        if c.isCtrl:
+            # loop on input and broadcast
+            while not exitFlag:
+                buf = c.inputSock.receive()
+                print("Controller buf: " + str(buf[:5]))
 
-    if c.isCtrl:
-        # loop on input and broadcast
-        while not exitFlag:
-            buf = c.inputSock.receive()
-            print("Controller buf: " + str(buf[:5]))
-            o.inputSock.send(buf)
-    else:
-        # loop on data and broadcast
-        while not exitFlag:
-            buf = c.dataSock.receive()
-            print("Controlled buf: " + str(buf[:5]))
-            o.dataSock.send(buf)
+        else:
+            # loop on data and broadcast
+            while not exitFlag:
+                buf = c.dataSock.receive()
+                print("Controlled buf: " + str(buf[:5]))
+                o.dataSock.send(buf)
+    except Exception:
+        return
 
 
 def main():

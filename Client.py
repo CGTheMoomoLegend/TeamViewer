@@ -46,3 +46,9 @@ class Client:
             self.send_input_msg("md", button)
         else:
             self.send_input_msg("mu", button)
+
+    def send_mouse_scroll_msg(self, clicks):
+        self.send_input_msg("")
+
+    def send_close_msg(self):
+        self.send_input_msg("closing")

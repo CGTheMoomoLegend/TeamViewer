@@ -29,7 +29,8 @@ SERVER_IP = 'localhost'
 
 # input related
 
-MOUSE_MAP = {1: 2, 2: 32, 3: 8}
+MOUSE_MAP = {1: 2, 2: 32, 3: 8, 4: 0, 5: 0}
+MOUSE_SCROLL_CLICKS_STD = 200
 
 # pygame related
 
