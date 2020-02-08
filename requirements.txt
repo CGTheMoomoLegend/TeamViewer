@@ -1,0 +1,4 @@
+pygame
+wxPython
+mss
+pyautogui

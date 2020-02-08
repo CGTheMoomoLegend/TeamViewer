@@ -106,11 +106,10 @@ def handle_client(c: Client, o: Client):
     global exitFlag
     try:
         if c.isCtrl:
-            # loop on input and broadcast
-            while not exitFlag:
+            # loop on input andot exitFlag:
                 buf = c.inputSock.receive()
                 print("Controller buf: " + str(buf[:5]))
-
+                o.inputSock.send(buf)
         else:
             # loop on data and broadcast
             while not exitFlag:

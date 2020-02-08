@@ -17,7 +17,7 @@ class Server:
 
     def send_screenshot(self):
         ss = get_screenshot()
-        print("About to try and send screenshot on data_socket")
+        # print("About to try and send screenshot on data_socket")
         self.data_socket.send(compress_screenshot(ss))
 
     def handle_keyboard_down(self, key):
@@ -55,7 +55,9 @@ class Server:
         print(self.input_socket)
         while 'listening':
             msg = self.input_socket.receive().decode('ascii').split(':')
+
             prefix = msg[0]
+            print("Received prefix: " + prefix)
             #     print('prefix:', prefix)
             if prefix == "kd":
                 self.handle_keyboard_down(msg[1])
