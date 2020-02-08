@@ -60,9 +60,14 @@ class Server:
             prefix = msg[0]
             # print("Received prefix: " + prefix)
             #     print('prefix:', prefix)
+            if msg[1] in GAME_TO_AUTO:
+                msg[1] = GAME_TO_AUTO[msg[1]]
+
             if prefix == "kd":
+                print("KEY DOWN: " + msg[1])
                 self.handle_keyboard_down(msg[1])
             elif prefix == "ku":
+                print("KEY UP: " + msg[1])
                 self.handle_keyboard_up(msg[1])
             elif prefix == "md" or prefix == "mu":
                 self.handle_mouse_btn_msg(msg[1], prefix == "md")

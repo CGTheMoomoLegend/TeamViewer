@@ -40,3 +40,9 @@ TICK_RATE = 60
 
 FIRST_INDEX = 0
 LAST_INDEX = -1
+
+GAME_TO_AUTO = {306: 'ctrl_l', 308: 'alt_l', 304: 'shift', 305: 'ctrl_r', 307: 'alt_r', 303: 'shift_r', 13: 'enter',
+                301: 'caps_lock', 9: 'tab', 282: 'f1', 283: 'f2', 284: 'f3', 285: 'f4', 286: 'f5', 287: 'f6', 288: 'f7',
+                289: 'f8', 290: 'f9', 291: 'f10', 292: 'f11', 293: 'f12', 316: 'print_screen', 302: 'scroll_lock',
+                19: 'pause', 280: 'page_up', 278: 'home', 277: 'insert', 127: 'delete', 279: 'end', 281: 'page_down',
+                276: 'left', 274: 'down', 275: 'right', 273: 'up', 27: 'esc'}

@@ -1,3 +1,4 @@
+pynput
 pygame
 wxPython
 mss
